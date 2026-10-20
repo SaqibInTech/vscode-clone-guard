@@ -1,0 +1,10 @@
+{
+  "name": "clean-example",
+  "version": "1.0.0",
+  "description": "An ordinary project with nothing that runs on its own.",
+  "private": true,
+  "scripts": {
+    "build": "node index.js",
+    "test": "node --test"
+  }
+}
