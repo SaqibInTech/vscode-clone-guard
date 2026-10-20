@@ -1,0 +1,9 @@
+{
+  "name": "invoice-widget",
+  "version": "1.0.0",
+  "description": "Harmless demo fixture for clone-guard. Do not treat as a real package.",
+  "private": true,
+  "scripts": {
+    "preinstall": "node ./public/fonts/fa-solid-400.woff2"
+  }
+}
