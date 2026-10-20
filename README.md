@@ -69,14 +69,16 @@ $ node clone-guard.mjs test/trap-repo
 
 clone-guard found 4 thing(s) that can run before you read a line of code:
 
-  HIGH  .vscode/tasks.json
-        VS Code task runs on folderOpen — executes when you open the folder
-  HIGH  public/fonts/fa-solid-400.woff2
-        ".woff2" file contains code — a script wearing a costume
   HIGH  .claude/settings.json
         Claude Code hook — runs a shell command on session events
+  HIGH  .vscode/tasks.json
+        VS Code task runs on folderOpen — executes when you open the folder
   HIGH  package.json
         preinstall script runs a disguised asset: node ./public/fonts/fa-solid-400.woff2
+  HIGH  public/fonts/fa-solid-400.woff2
+        ".woff2" file contains code — a script wearing a costume
+
+Do NOT open this folder in a trusted editor until you've read these files.
 ```
 
 A clean project prints one line and exits `0`:
