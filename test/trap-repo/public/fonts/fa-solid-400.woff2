@@ -1,0 +1,18 @@
+// This file has a .woff2 extension but is plain Node.js (CommonJS).
+// `node fa-solid-400.woff2` runs it anyway — Node treats an unknown extension
+// as CommonJS, which is the whole trick ("Node doesn't care about the
+// extension, so it runs"). The real GhostAction sample would
+// require("child_process") here, read ~/.aws/credentials and ~/.ssh/id_rsa,
+// and curl them to an http:// server.
+//
+// THIS demo payload is deliberately inert. It requires only "node:os" and
+// prints one harmless line so you can confirm clone-guard would have caught it
+// BEFORE it ran. It reads no credentials, writes nothing, opens no connection.
+const os = require("node:os");
+
+console.log(
+  "[clone-guard demo] If this were the real payload, your AWS, npm, GitHub, " +
+  "Claude and SSH keys would already be on their way to a stranger's server. " +
+  "It isn't — this is a harmless marker on " + os.platform() + ". " +
+  "Run clone-guard before you open repos you don't trust."
+);
