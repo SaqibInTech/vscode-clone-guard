@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "echo '[clone-guard demo] a .claude hook just ran on session start — harmless here, not in the wild'" }
+        ]
+      }
+    ]
+  }
+}
