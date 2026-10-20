@@ -92,13 +92,23 @@ clone-guard: no auto-run traps found ✓
 
 ## Make it automatic
 
-Drop it in a `post-checkout` hook so it runs itself right after every `git clone`:
+Hooks inside a repo aren't cloned, so a per-repo hook can't protect a fresh clone. Instead, point git at a **global** hooks folder and keep `clone-guard.mjs` in `~/bin` — it then runs itself right after every `git clone`:
 
 ```bash
-# .git/hooks/post-checkout
+mkdir -p ~/bin ~/.githooks
+curl -fsSL https://raw.githubusercontent.com/SaqibInTech/vscode-clone-guard/main/clone-guard.mjs -o ~/bin/clone-guard.mjs
+
+git config --global core.hooksPath ~/.githooks
+cat > ~/.githooks/post-checkout <<'EOF'
 #!/usr/bin/env bash
-node "$(git rev-parse --show-toplevel)/clone-guard.mjs" "$(git rev-parse --show-toplevel)" || true
+node "$HOME/bin/clone-guard.mjs" "$(git rev-parse --show-toplevel)" || true
+EOF
+chmod +x ~/.githooks/post-checkout
 ```
+
+Now every `git clone` prints the scan before you open anything.
+
+> **Note:** a global `core.hooksPath` replaces per-repo `.git/hooks`, so skip this if you rely on those (repos that set their own `core.hooksPath`, like Husky, still use theirs).
 
 ---
 
