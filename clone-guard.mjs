@@ -2,7 +2,7 @@
 // clone-guard: scan a freshly cloned repo for "runs the moment you open it" traps.
 // Flags the patterns behind the Oct 2026 GhostAction + npm-worm waves. Read-only.
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, extname, basename } from "node:path";
+import { join, extname, basename, relative } from "node:path";
 
 const root = process.argv[2] || ".";
 const findings = [];
@@ -21,7 +21,7 @@ const SCRIPT_EXT = new Set([".js", ".mjs", ".cjs", ".ts", ".py", ".sh"]);
 const DISGUISE_EXT = new Set([".woff2", ".woff", ".ttf", ".png", ".jpg", ".ico", ".dat", ".bin"]);
 
 const inspect = (p) => {
-  const rel = p.slice(root.length + 1);
+  const rel = relative(root, p);
   const base = basename(p);
   let text = "";
   try { text = readFileSync(p, "utf8"); } catch { return; }
@@ -31,7 +31,7 @@ const inspect = (p) => {
     add("HIGH", rel, 'VS Code task runs on folderOpen — executes when you open the folder');
   if (p.includes(".claude") && base === "settings.json" && /"hooks"/.test(text))
     add("HIGH", rel, "Claude Code hook — runs a shell command on session events");
-  if (base === ".mcp.json" || /enableAllProjectMcpServers/.test(text))
+  if (base === ".mcp.json" || (extname(base) === ".json" && /enableAllProjectMcpServers/.test(text)))
     add("MED", rel, "Project MCP servers may auto-start without a prompt");
 
   // 2) A binary/asset extension that is really a script
