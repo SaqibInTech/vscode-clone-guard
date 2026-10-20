@@ -1,0 +1,28 @@
+name: clone-guard
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  self-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 1) A clean project must pass (exit 0)
+      - name: Clean repo passes
+        run: node clone-guard.mjs test/clean-repo
+
+      # 2) The trap fixture must be caught (clone-guard exits 1 on findings)
+      - name: Trap repo is caught
+        run: |
+          if node clone-guard.mjs test/trap-repo; then
+            echo "::error::clone-guard did NOT flag the trap fixture"
+            exit 1
+          else
+            echo "clone-guard correctly flagged the trap fixture"
+          fi
